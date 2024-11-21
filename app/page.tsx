@@ -1,7 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Paper,
+  IconButton,
+  Grid,
+  AppBar,
+  Toolbar,
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Memo {
   _id: string;
@@ -77,81 +90,104 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen p-8 bg-gray-50">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-center">日本語メモ帳</h1>
-        
-        <form onSubmit={createMemo} className="mb-8">
-          <textarea
+    <Box>
+      <AppBar position="static" elevation={0} sx={{ mb: 4 }}>
+        <Toolbar>
+          <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
+            日本語メモ帳
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      <Container maxWidth="md">
+        <Box component="form" onSubmit={createMemo} sx={{ mb: 4 }}>
+          <TextField
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="memo-input w-full p-4 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            multiline
             rows={3}
+            fullWidth
             placeholder="新しいメモを入力してください..."
+            variant="outlined"
+            sx={{ mb: 2 }}
           />
-          <button
+          <Button
             type="submit"
-            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            variant="contained"
+            color="primary"
           >
             保存
-          </button>
-        </form>
+          </Button>
+        </Box>
 
-        <div className="space-y-4">
+        <Grid container spacing={2}>
           {memos.map((memo) => (
-            <div key={memo._id} className="bg-white p-4 rounded-lg shadow">
-              {editingMemo === memo._id ? (
-                <div>
-                  <textarea
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    className="memo-input w-full p-2 border rounded mb-2"
-                    rows={3}
-                  />
-                  <div className="flex justify-end gap-2">
-                    <button
-                      onClick={() => updateMemo(memo._id)}
-                      className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
-                    >
-                      更新
-                    </button>
-                    <button
-                      onClick={() => setEditingMemo(null)}
-                      className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600"
-                    >
-                      キャンセル
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <p className="memo-input text-lg mb-2 whitespace-pre-wrap">{memo.content}</p>
-                  <div className="flex justify-between items-center text-sm text-gray-500">
-                    <span>{new Date(memo.createdAt).toLocaleString('ja-JP')}</span>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => {
-                          setEditingMemo(memo._id);
-                          setEditContent(memo.content);
-                        }}
-                        className="p-1 hover:text-blue-600"
+            <Grid item xs={12} key={memo._id}>
+              <Paper sx={{ p: 2 }}>
+                {editingMemo === memo._id ? (
+                  <Box>
+                    <TextField
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      multiline
+                      rows={3}
+                      fullWidth
+                      variant="outlined"
+                      sx={{ mb: 2 }}
+                    />
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                      <Button
+                        onClick={() => updateMemo(memo._id)}
+                        variant="contained"
+                        color="success"
                       >
-                        <PencilIcon className="h-5 w-5" />
-                      </button>
-                      <button
-                        onClick={() => deleteMemo(memo._id)}
-                        className="p-1 hover:text-red-600"
+                        更新
+                      </Button>
+                      <Button
+                        onClick={() => setEditingMemo(null)}
+                        variant="contained"
+                        color="inherit"
                       >
-                        <TrashIcon className="h-5 w-5" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+                        キャンセル
+                      </Button>
+                    </Box>
+                  </Box>
+                ) : (
+                  <Box>
+                    <Typography sx={{ mb: 2, whiteSpace: 'pre-wrap' }}>
+                      {memo.content}
+                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Typography variant="caption" color="text.secondary">
+                        {new Date(memo.createdAt).toLocaleString('ja-JP')}
+                      </Typography>
+                      <Box>
+                        <IconButton
+                          onClick={() => {
+                            setEditingMemo(memo._id);
+                            setEditContent(memo.content);
+                          }}
+                          color="primary"
+                          size="small"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => deleteMemo(memo._id)}
+                          color="error"
+                          size="small"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+              </Paper>
+            </Grid>
           ))}
-        </div>
-      </div>
-    </main>
+        </Grid>
+      </Container>
+    </Box>
   );
 }

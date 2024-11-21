@@ -1,5 +1,5 @@
-import { connectDB } from '@/lib/mongodb';
-import { Memo } from '@/models/Memo';
+import { connectDB } from '@/app/lib/mongodb';
+import { Memo } from '@/app/models/Memo';
 import { NextResponse } from 'next/server';
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {

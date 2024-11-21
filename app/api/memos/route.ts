@@ -1,5 +1,5 @@
-import { connectDB } from '@/lib/mongodb';
-import { Memo } from '@/models/Memo';
+import { connectDB } from '../../lib/mongodb';
+import { Memo } from '../../models/Memo';
 import { NextResponse } from 'next/server';
 
 export async function GET() {

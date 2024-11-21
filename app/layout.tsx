@@ -1,30 +1,25 @@
-import { Noto_Sans_JP } from 'next/font/google'
-import type { Metadata } from 'next'
-import React from 'react'
+'use client';
 
-const notoSansJP = Noto_Sans_JP({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-})
+import { Inter } from 'next/font/google';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from './theme';
 
-export const metadata: Metadata = {
-  title: 'Japanese Greeting',
-  description: 'A simple page displaying こんにちは',
-}
+const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="ja">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </head>
-      <body className={notoSansJP.className} style={{ margin: 0, padding: 0 }}>{children}</body>
+      <body className={inter.className}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
-  )
+  );
 }
